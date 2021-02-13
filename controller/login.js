@@ -1,7 +1,7 @@
 const { user } = require("../models");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
-const {OAuth2Client} = require('google-auth-library');
+const { OAuth2Client } = require("google-auth-library");
 const client = new OAuth2Client(process.env.CLIENT_ID);
 module.exports = {
   post: async (req, res) => {
@@ -70,13 +70,13 @@ module.exports = {
     }
   },
   googleLogin: (req, res) => {
-    let token = req.body.token
-    console.log(token)
-    let userInfo = {}
+    let token = req.body.token;
+    console.log(token);
+    let userInfo = {};
     async function verify() {
       const ticket = await client.verifyIdToken({
-          idToken: token,
-          audience: process.env.CLIENT_ID
+        idToken: token,
+        audience: process.env.CLIENT_ID,
       });
       const payload = ticket.getPayload();
       userInfo.nickname = payload.name;
@@ -84,15 +84,15 @@ module.exports = {
       userInfo.image = payload.picture;
     }
     verify()
-    .then(async () => {
-      const { nickname, email, image } = userInfo
-      await user.findOrCreate({
-        where: { email, nickname },
-        defaults: { nickname, email, image }
+      .then(async () => {
+        const { nickname, email, image } = userInfo;
+        const [result, created] = await user.findOrCreate({
+          where: { email, nickname },
+          defaults: { nickname, email, image },
+        });
+        res.cookie("oauthToken", token);
+        res.status(200).json({ data: result, message: "ok" });
       })
-      res.cookie('oauthToken', token);
-      res.status(200).json({ data: null, message: "ok" });
-    })
-    .catch(console.error);
-  }
+      .catch(console.error);
+  },
 };
