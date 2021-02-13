@@ -98,6 +98,10 @@ module.exports = {
               res.status(200).json({ data: null, message: "update success" });
             });
           } else {
+            await user.update(
+              { nickname, password: pwd },
+              { where: { id: result.id } }
+            );
             res.status(200).json({ data: null, message: "update success" });
           }
         }
