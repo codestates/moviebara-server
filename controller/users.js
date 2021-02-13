@@ -4,6 +4,8 @@ const bcrypt = require("bcrypt");
 const Op = require("sequelize").Op;
 const AWS = require("aws-sdk");
 const fs = require("fs");
+const { OAuth2Client } = require("google-auth-library");
+const client = new OAuth2Client(process.env.CLIENT_ID);
 
 module.exports = {
   get: async (req, res) => {
