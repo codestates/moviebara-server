@@ -90,7 +90,15 @@ module.exports = {
           where: { email, nickname },
           defaults: { nickname, email, image },
         });
-        res.cookie("oauthToken", token);
+        res.cookie("oauthToken", token, {
+          domain: "localhost",
+          path: "/",
+          httpOnly: true,
+          secure: true, //(https 사용시 추가)
+          sameSite: "none",
+          maxAge: 1000 * 60 * 60 * 24,
+          overwrite: true,
+        });
         res.status(200).json({ data: result, message: "ok" });
       })
       .catch(console.error);
