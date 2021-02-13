@@ -81,23 +81,25 @@ module.exports = {
             secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
           });
 
-          console.log(req.file);
+          if (req.file !== undefined) {
+            const param = {
+              Bucket: "moviebara",
+              Key:
+                "image/" + nickname + "profile" + new Date().getTime() + ".jpg",
+              ACL: "public-read",
+              Body: req.file.buffer,
+            };
 
-          const param = {
-            Bucket: "moviebara",
-            Key:
-              "image/" + nickname + "profile" + new Date().getTime() + ".jpg",
-            ACL: "public-read",
-            Body: req.file.buffer,
-          };
-
-          s3.upload(param, async function (err, data) {
-            await user.update(
-              { nickname, image: data.Location, password: pwd },
-              { where: { id: result.id } }
-            );
+            s3.upload(param, async function (err, data) {
+              await user.update(
+                { nickname, image: data.Location, password: pwd },
+                { where: { id: result.id } }
+              );
+              res.status(200).json({ data: null, message: "update success" });
+            });
+          } else {
             res.status(200).json({ data: null, message: "update success" });
-          });
+          }
         }
       });
     } catch (err) {
