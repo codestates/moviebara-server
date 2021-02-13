@@ -51,9 +51,9 @@ module.exports = {
   },
   updatePost: async (req, res) => {
     try {
-      const { text, rate, userId, movieId } = req.body;
+      const { postId, text, rate, userId, movieId } = req.body;
       if (text && rate && userId && movieId) {
-        await post.update({ text, rate }, { where: { userId, movieId } });
+        await post.update({ text, rate }, { where: { id: postId } });
         res.status(200).json({ data: null, message: "update success" });
       } else {
         res.status(400).json({ data: null, message: "should send full data" });
