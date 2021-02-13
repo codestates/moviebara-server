@@ -9,27 +9,28 @@ module.exports = {
   get: async (req, res) => {
     try {
       const oauthToken = req.cookies.oauthToken;
-      if(oauthToken) {
+      if (oauthToken) {
         const ticket = await client.verifyIdToken({
           idToken: oauthToken,
-          audience: process.env.CLIENT_ID
+          audience: process.env.CLIENT_ID,
         });
         const payload = ticket.getPayload();
         const myInfo = await user.findOne({
           where: { nickname: payload.name },
-          attributes: { exclude: ["password"] }
-        })
-        if(myInfo) res.status(200).send({ data: myInfo, message: "ok" })
-      }
-      const token = req.cookies.accessToken;
-      jwt.verify(token, process.env.ACCESS_SECRET, async (error, result) => {
-        const myInfo = await user.findOne({
-          where: { id: result.id },
           attributes: { exclude: ["password"] },
         });
         if (myInfo) res.status(200).send({ data: myInfo, message: "ok" });
-        else res.status(400).send({ data: null, message: "invalid user" });
-      });
+      } else {
+        const token = req.cookies.accessToken;
+        jwt.verify(token, process.env.ACCESS_SECRET, async (error, result) => {
+          const myInfo = await user.findOne({
+            where: { id: result.id },
+            attributes: { exclude: ["password"] },
+          });
+          if (myInfo) res.status(200).send({ data: myInfo, message: "ok" });
+          else res.status(400).send({ data: null, message: "invalid user" });
+        });
+      }
     } catch (err) {
       console.error(err);
     }
