@@ -38,6 +38,7 @@ module.exports = {
           include: [
             { model: user, attributes: ["nickname", "image"] },
             { model: scrap, attributes: [] },
+            { model: movie, attributes: ["title", "image", "genre"] }
           ],
           group: ["id"],
           where: { movieId: query.movie_id }
