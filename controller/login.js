@@ -103,7 +103,7 @@ module.exports = {
       })
       .catch(console.error);
   },
-  nonMemberLogin = (req, res) => {
+  nonMemberLogin: (req, res) => {
     try {
       // 비회원 전용 토큰 발급
       return new Promise((res, rej) => {
