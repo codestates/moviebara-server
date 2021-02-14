@@ -106,9 +106,15 @@ module.exports = {
   nonMemberLogin: (req, res) => {
     try {
       // 비회원 전용 토큰 발급
-      return new Promise((res, rej) => {
+      return new Promise(async (res, rej) => {
+        const nonMemberUserInfo = await user.create({ nickname: "비회원", email: "비회원", image: "https://pbs.twimg.com/media/EbQd1uFX0AIckLf.png" })
         jwt.sign(
-          { nickname: "비회원" },
+          { 
+            id: nonMemberUserInfo.id,
+            nickname: "비회원",
+            email: "비회원",
+            image: "https://pbs.twimg.com/media/EbQd1uFX0AIckLf.png"
+          },
           process.env.ACCESS_SECRET,
           {
             expiresIn: "1d",
@@ -120,7 +126,7 @@ module.exports = {
         );
       }).then((token) => {
         // 생성된 토큰을 쿠키에 담는다.
-        res.cookie("nonMemberToken", token, {
+        res.cookie("accessToken", token, {
           //domain: "localhost",
           path: "/",
           httpOnly: true,

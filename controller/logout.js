@@ -39,17 +39,6 @@ module.exports = {
         });
         res.status(200).json({ data: null, message: 'ok' })   
       }
-    } else if (req.cookies.nonMemberToken) {
-      res.clearCookie('nonMemberToken', {
-        //domain: "localhost",
-        path: "/",
-        httpOnly: true,
-        secure: true,
-        sameSite: "none",
-        maxAge: 1000 * 60 * 60 * 24,
-        overwrite: true,
-      });
-      res.status(200).json({ data: null, message: 'ok' })
     } else {
       res.status(400).json({ data: null, message: 'Please login first' })
     }
