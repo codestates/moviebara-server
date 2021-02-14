@@ -57,8 +57,8 @@ module.exports = {
             //domain: "localhost",
             path: "/",
             httpOnly: true,
-            // secure: true, (https 사용시 추가)
-            // sameSite: "none",
+            secure: true,
+            sameSite: "none",
             maxAge: 1000 * 60 * 60 * 24,
             overwrite: true,
           });
@@ -94,8 +94,8 @@ module.exports = {
           //domain: "localhost",
           path: "/",
           httpOnly: true,
-          //secure: true, //(https 사용시 추가)
-          //sameSite: "none",
+          secure: true,
+          sameSite: "none",
           maxAge: 1000 * 60 * 60 * 24,
           overwrite: true,
         });
@@ -124,8 +124,8 @@ module.exports = {
           //domain: "localhost",
           path: "/",
           httpOnly: true,
-          // secure: true, (https 사용시 추가)
-          // sameSite: "none",
+          secure: true,
+          sameSite: "none",
           maxAge: 1000 * 60 * 60 * 24,
           overwrite: true,
         });

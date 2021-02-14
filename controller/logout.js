@@ -9,7 +9,15 @@ module.exports = {
           data: null,
           message: "invalid access token"
         })} else {
-          res.clearCookie('accessToken');
+          res.clearCookie('accessToken', {
+            //domain: "localhost",
+            path: "/",
+            httpOnly: true,
+            secure: true,
+            sameSite: "none",
+            maxAge: 1000 * 60 * 60 * 24,
+            overwrite: true,
+          });
           res.status(200).json({ data: null, message: 'ok' })    
         }
       })
@@ -20,11 +28,27 @@ module.exports = {
       });
       const payload = ticket.getPayload();
       if(payload) {
-        res.clearCookie('oauthToken');
+        res.clearCookie('oauthToken', {
+          //domain: "localhost",
+          path: "/",
+          httpOnly: true,
+          secure: true,
+          sameSite: "none",
+          maxAge: 1000 * 60 * 60 * 24,
+          overwrite: true,
+        });
         res.status(200).json({ data: null, message: 'ok' })   
       }
     } else if (req.cookies.nonMemberToken) {
-      res.clearCookie('nonMemberToken');
+      res.clearCookie('nonMemberToken', {
+        //domain: "localhost",
+        path: "/",
+        httpOnly: true,
+        secure: true,
+        sameSite: "none",
+        maxAge: 1000 * 60 * 60 * 24,
+        overwrite: true,
+      });
       res.status(200).json({ data: null, message: 'ok' })
     } else {
       res.status(400).json({ data: null, message: 'Please login first' })
