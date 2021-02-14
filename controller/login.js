@@ -54,7 +54,7 @@ module.exports = {
         }).then((token) => {
           // 생성된 토큰을 쿠키에 담는다.
           res.cookie("accessToken", token, {
-            domain: "localhost",
+            //domain: "localhost",
             path: "/",
             httpOnly: true,
             // secure: true, (https 사용시 추가)
@@ -91,11 +91,11 @@ module.exports = {
           defaults: { nickname, email, image },
         });
         res.cookie("oauthToken", token, {
-          domain: "localhost",
+          //domain: "localhost",
           path: "/",
           httpOnly: true,
-          secure: true, //(https 사용시 추가)
-          sameSite: "none",
+          //secure: true, //(https 사용시 추가)
+          //sameSite: "none",
           maxAge: 1000 * 60 * 60 * 24,
           overwrite: true,
         });
@@ -103,4 +103,36 @@ module.exports = {
       })
       .catch(console.error);
   },
+  nonMemberLogin = (req, res) => {
+    try {
+      // 비회원 전용 토큰 발급
+      return new Promise((res, rej) => {
+        jwt.sign(
+          { nickname: "비회원" },
+          process.env.ACCESS_SECRET,
+          {
+            expiresIn: "1d",
+          },
+          function (err, token) {
+            if (err) rej(err);
+            else res(token);
+          }
+        );
+      }).then((token) => {
+        // 생성된 토큰을 쿠키에 담는다.
+        res.cookie("nonMemberToken", token, {
+          //domain: "localhost",
+          path: "/",
+          httpOnly: true,
+          // secure: true, (https 사용시 추가)
+          // sameSite: "none",
+          maxAge: 1000 * 60 * 60 * 24,
+          overwrite: true,
+        });
+        res.status(200).json({ data: null, message: "ok" });
+      });
+    } catch (err) {
+      console.error(err);
+    }
+  }
 };
