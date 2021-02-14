@@ -11,7 +11,6 @@ module.exports = {
   get: async (req, res) => {
     try {
       const oauthToken = req.cookies.oauthToken;
-      const nonMemberToken = req.cookies.nonMemberToken
       if (oauthToken) {
         const ticket = await client.verifyIdToken({
           idToken: oauthToken,
@@ -23,10 +22,6 @@ module.exports = {
           attributes: { exclude: ["password"] },
         });
         if (myInfo) res.status(200).send({ data: myInfo, message: "ok" });
-      } else if(nonMemberToken) {
-        jwt.verify(nonMemberToken, process.env.ACCESS_SECRET, (error, result) => {
-          res.status(200).json({ data: { nickname: result.nickname }, message: "ok" })
-        })
       } else {
         const token = req.cookies.accessToken;
         jwt.verify(token, process.env.ACCESS_SECRET, async (error, result) => {
